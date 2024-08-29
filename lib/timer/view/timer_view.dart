@@ -1,5 +1,7 @@
 import 'package:bloc_flutter_learning/timer/bloc/timer_bloc.dart';
+import 'package:bloc_flutter_learning/widget/back_ground.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glass/glass.dart';
 
@@ -9,7 +11,11 @@ class TimerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark),
         centerTitle: true,
         title: const Text(
           'Flutter Timer',
@@ -22,7 +28,7 @@ class TimerView extends StatelessWidget {
       ),
       body: const Stack(
         children: [
-          const BackGround(),
+          BackGround(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,6 +82,7 @@ class Actions extends StatelessWidget {
             ...switch (state) {
               TimerInitial() => [
                   FloatingActionButton(
+                    heroTag: '1',
                     child: const Icon(Icons.play_arrow),
                     onPressed: () => context
                         .read<TimerBloc>()
@@ -84,6 +91,7 @@ class Actions extends StatelessWidget {
                 ],
               TimerRunInprogress() => [
                   FloatingActionButton(
+                    heroTag: '1',
                     child: const Icon(Icons.pause),
                     onPressed: () =>
                         context.read<TimerBloc>().add(const TimerPaused()),
@@ -96,6 +104,7 @@ class Actions extends StatelessWidget {
                 ],
               TimerRunPause() => [
                   FloatingActionButton(
+                    heroTag: '1',
                     child: const Icon(Icons.play_arrow),
                     onPressed: () =>
                         context.read<TimerBloc>().add(const TimerResumed()),
@@ -117,27 +126,6 @@ class Actions extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class BackGround extends StatelessWidget {
-  const BackGround({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(
-                'assets/images/wallpaperflare.com_wallpaper.jpg',
-              ))),
-      // child:
-      // Image.asset(
-      //   'assets/images/wallpaperflare.com_wallpaper.jpg',
-      //   fit: BoxFit.contain,
-      // ),
     );
   }
 }

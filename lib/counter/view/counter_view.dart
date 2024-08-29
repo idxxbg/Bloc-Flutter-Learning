@@ -1,7 +1,10 @@
 import 'package:bloc_flutter_learning/counter/cubit/counter_cubit.dart';
+import 'package:bloc_flutter_learning/widget/back_ground.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glass/glass.dart';
 
 class CounterView extends StatelessWidget {
   const CounterView({super.key});
@@ -10,7 +13,13 @@ class CounterView extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      // extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark,
+        ),
         centerTitle: true,
         title: const Text(
           'Counter App',
@@ -21,15 +30,25 @@ class CounterView extends StatelessWidget {
           ),
         ),
       ),
-      body: Center(
-        child: BlocBuilder<CounterCubit, int>(
-          builder: (context, state) {
-            return Text(
-              '$state',
-              style: textTheme.displayMedium,
-            );
-          },
-        ),
+      body: Stack(
+        children: [
+          const BackGround(),
+          Center(
+            child: BlocBuilder<CounterCubit, int>(
+              builder: (context, state) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    '$state',
+                    style: textTheme.displayMedium,
+                  ),
+                ).asGlass(
+                    clipBorderRadius: BorderRadius.circular(10),
+                    tintColor: Colors.yellowAccent.shade400);
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,

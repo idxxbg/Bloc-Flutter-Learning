@@ -1,11 +1,20 @@
 import 'package:bloc_flutter_learning/counter/counter_app.dart';
 import 'package:bloc_flutter_learning/counter_bloc/view/counter_page.dart';
 import 'package:bloc_flutter_learning/timer/ticker_app.dart';
+import 'package:bloc_flutter_learning/weather/weather_main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+import 'package:like_button/like_button.dart';
 
 void main() {
   runApp(const MyApp());
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -31,7 +41,39 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          HapticFeedback.lightImpact();
+        },
+        child: LikeButton(
+          animationDuration: const Duration(seconds: 1),
+          circleColor: const CircleColor(start: Colors.green, end: Colors.pink),
+          // bubblesColor: const BubblesColor(
+          //   dotPrimaryColor: Color(0xff33b5e5),
+          //   dotSecondaryColor: Color(0xff0099cc),
+          // ),
+          bubblesColor: const BubblesColor(
+              dotPrimaryColor: Color(0xFFFFC107),
+              dotSecondaryColor: Color(0xFFFF9800),
+              dotThirdColor: Color(0xFFFF5722),
+              dotLastColor: Color(0xFFF44336)),
+          likeBuilder: (isLiked) {
+            Icon(
+              CupertinoIcons.sparkles,
+              color: isLiked ? Colors.white70 : Colors.white10,
+              size: 20,
+            );
+            return null;
+          },
+        ),
+      ),
       appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark,
+          // systemNavigationBarIconBrightness: Brightness.light,
+        ),
+        backgroundColor: Colors.transparent,
         title: const Text(
           'Bloc tutorial',
           style: TextStyle(
@@ -45,9 +87,9 @@ class MyHomePage extends StatelessWidget {
       drawer: Drawer(
         child: ListView(
           children: [
-            Container(
-              decoration: const BoxDecoration(color: Colors.pinkAccent),
-              child: const UserAccountsDrawerHeader(
+            const SizedBox(
+              // decoration: const BoxDecoration(color: Colors.pinkAccent),
+              child: UserAccountsDrawerHeader(
                 accountName: Text('idxxbg'),
                 accountEmail: Text('idxxbg@gmail.com'),
                 currentAccountPicture: CircleAvatar(
@@ -99,10 +141,13 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const WeatherMain()));
+              },
               child: const ListTile(
                 title: Text('Flutter Weather'),
-                trailing: Icon(Icons.nature_people),
+                trailing: Icon(CupertinoIcons.cloud_sun_fill),
               ),
             ),
           ],
@@ -118,8 +163,20 @@ class BodyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(),
+    return Center(
+      child: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(
+                    "assets/images/wallpaperflare.com_wallpaper.jpg"),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
